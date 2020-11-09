@@ -2,9 +2,7 @@ import sys
 
 
 def init_board():
-    """Returns an empty 3-by-3 board (with .)."""
     board = [[".", ".", "."], [".", ".", "."], [".", ".", "."]]
-
     return board
 
 
@@ -25,9 +23,6 @@ def get_move(board, player):
                 return (row, col)
 
 
-print(get_move([[".", ".", "."], [".", "x", "."], [".", ".", "0"]], "0"))
-
-
 def get_ai_move(board, player):
     """Returns the coordinates of a valid move for player on board."""
     row, col = 0, 0
@@ -35,18 +30,40 @@ def get_ai_move(board, player):
 
 
 def mark(board, player, row, col):
-    """Marks the element at row & col on the board for player."""
-    pass
+    alphabet_to_index = {'A': 0, 'B': 1, 'C': 2}
+    numbers_to_index = {'1': 0, '2': 1, '3': 2}
+    row_index = alphabet_to_index[row]
+    col_index = numbers_to_index[col]
+    board[row_index][col_index] = player
+    return board
 
 
 def has_won(board, player):
-    """Returns True if player has won the game."""
-    return False
+    if board[0][0] == player and board[0][1] == player and board[0][2] == player:
+        return True
+    elif board[1][0] == player and board[1][1] == player and board[1][2] == player:
+        return True
+    elif board[2][0] == player and board[2][1] == player and board[2][2] == player:
+        return True
+    elif board[0][0] == player and board[1][0] == player and board[2][0] == player:
+        return True
+    elif board[0][1] == player and board[1][1] == player and board[2][1] == player:
+        return True
+    elif board[0][2] == player and board[1][2] == player and board[2][2] == player:
+        return True
+    elif board[0][0] == player and board[1][1] == player and board[2][2] == player:
+        return True
+    elif board[0][2] == player and board[1][1] == player and board[2][0] == player:
+        return True
+    else:
+        return False
 
 
 def is_full(board):
-    """Returns True if board is full."""
-    return False
+    for i in board:
+        if "." in i:
+            return False
+    return True
 
 
 def print_board(board):
@@ -70,16 +87,17 @@ def tictactoe_game(mode='HUMAN-HUMAN'):
     # use get_move(), mark(), has_won(), is_full(), and print_board()
     # to create game logic
     print_board(board)
-    row, col = get_move(board, 1)
-    mark(board, 1, row, col)
+    row, col = get_move(board, "x")
+    board = mark(board, "x", row, col)
+    print_board(board)
 
-    winner = 0
-    print_result(winner)
+#winner = 0
+#print_result(winner)
 
 
 def main_menu():
     tictactoe_game('HUMAN-HUMAN')
-
-
-# if __name__ == '__main__':
-#   main_menu()
+"""
+if __name__ == '__main__':
+    main_menu()
+"""
