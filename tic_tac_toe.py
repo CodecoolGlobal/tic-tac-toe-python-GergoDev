@@ -1,4 +1,6 @@
 import sys
+import os
+import time
 
 
 def init_board():
@@ -16,12 +18,18 @@ def get_move(board, player):
         move_pos = input("Please enter your move: ")
         move_pos = move_pos.upper()
         if move_pos == "QUIT":
-                sys.exit(0)
+            os.system("clear")
+            print("Good bye!")
+            time.sleep(1.3)
+            os.system("clear")
+            sys.exit(0)
         if move_pos != "" and len(move_pos) == 2:
             row = list(move_pos)[0]
             col = list(move_pos)[1]
             if row in alphabet_valid and col in numbers_valid and board[alphabet_to_index[row]][numbers_to_index[col]] == ".":
                 return (row, col)
+        else:
+            print("Please enter a valid position! A-C, 1-3")
 
 
 def get_ai_move(board, player):
@@ -68,6 +76,7 @@ def is_full(board):
 
 
 def print_board(board):
+    os.system("clear")
     print(f"""
        1   2   3
     A  {board[0][0]} | {board[0][1]} | {board[0][2]}
@@ -88,10 +97,10 @@ def switch_player(player):
 def tictactoe_game(mode='HUMAN-HUMAN'):
     if mode == "HUMAN-HUMAN":
         board = init_board()
+        print_board(board)
         player = "X"
         while True:
             player = switch_player(player)
-            print_board(board)
             row, col = get_move(board, player)
             board = mark(board, player, row, col)
             print_board(board)
@@ -101,14 +110,12 @@ def tictactoe_game(mode='HUMAN-HUMAN'):
             elif is_full(board):
                 print(print_result(0))
                 break
-
-
-# winner = 0
-# print_result(winner)
-
+    elif mode == "HUMAN-AI":
+        print("Fosat.txt")
 
 def main_menu():
-    tictactoe_game('HUMAN-HUMAN')
+    
+    tictactoe_game()
 
 
 if __name__ == '__main__':
