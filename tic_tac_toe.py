@@ -9,6 +9,15 @@ def init_board():
     return board
 
 
+def switch_player(player, first_run):
+    if first_run:
+        return player
+    elif player == "O":
+        return "X"
+    elif player == "X":
+        return "O"
+
+
 def get_move(board, player):
     alphabet_to_index = {'A': 0, 'B': 1, 'C': 2}
     numbers_to_index = {'1': 0, '2': 1, '3': 2}
@@ -37,8 +46,9 @@ def possible_win(board, player):
     one_step_win_coordinates = []
     two_step_win_coordinates = []
     three_step_win_coordinates = []
+    go_for_tie = []
     situations = [
-        [[0, 0], [0, 1], [0, 2]], 
+        [[0, 0], [0, 1], [0, 2]],
         [[1, 0], [1, 1], [1, 2]],
         [[2, 0], [2, 1], [2, 2]],
         [[0, 0], [1, 0], [2, 0]],
@@ -63,15 +73,13 @@ def possible_win(board, player):
             two_step_win_coordinates.append(situation)
         elif player_result_count == 0 and opponent_result_count == 0:
             three_step_win_coordinates.append(situation)
-    # print("One step win: ", one_step_win_coordinates)
-    # print("\n\n")
-    # print("Two step win: ", two_step_win_coordinates)
-    # print("\n\n")
-    # print("Three step win: ", three_step_win_coordinates)
+        elif player_result_count == 1 and opponent_result_count == 1:
+            go_for_tie.append(situation)
     return [
         one_step_win_coordinates,
         two_step_win_coordinates,
-        three_step_win_coordinates
+        three_step_win_coordinates,
+        go_for_tie
     ]
 
 
@@ -88,43 +96,64 @@ def pick_possible_coordinate(board, situation):
 
 def get_ai_move(board, player, difficulty):
     win_coordinates = possible_win(board, player)
-    one_step_win_coordinates, two_step_win_coordinates, three_step_win_coordinates = win_coordinates
+    one_step_win_coordinates, two_step_win_coordinates, three_step_win_coordinates, go_for_tie = win_coordinates
     selected_situation = None
     print("One step win: ", one_step_win_coordinates)
     print("\n")
     print("Two step win: ", two_step_win_coordinates)
     print("\n")
     print("Three step win: ", three_step_win_coordinates)
+    print("\n")
+    print("Go for tie: ", go_for_tie)
     if difficulty == 1:
         if len(three_step_win_coordinates) != 0:
             size = len(three_step_win_coordinates)
-            index = random.randint(size) if size > 1 else 0
+            index = random.randint(size)
             selected_situation = three_step_win_coordinates[index]
         elif len(two_step_win_coordinates) != 0:
             size = len(two_step_win_coordinates)
-            index = random.randint(size) if size > 1 else 0
+            index = random.randint(size)
             selected_situation = two_step_win_coordinates[index]
-        else:
+        elif len(three_step_win_coordinates) != 0:
             size = len(one_step_win_coordinates)
-            index = random.randint(size) if size > 1 else 0
+            index = random.randint(size)
             selected_situation = one_step_win_coordinates[index]
+        else:
+            size = len(go_for_tie)
+            index = random.randint(size)
+            selected_situation = go_for_tie[index]
     elif difficulty == 2:
         if len(one_step_win_coordinates) != 0:
             size = len(one_step_win_coordinates)
-            index = random.randint(size) if size > 1 else 0
+            index = random.randint(size)
             selected_situation = one_step_win_coordinates[index]
         elif len(two_step_win_coordinates) != 0:
             size = len(two_step_win_coordinates)
-            index = random.randint(size) if size > 1 else 0
+            index = random.randint(size)
             selected_situation = two_step_win_coordinates[index]
-        else:
+        elif len(three_step_win_coordinates) != 0:
             size = len(three_step_win_coordinates)
-            index = random.randint(size) if size > 1 else 0
+            index = random.randint(size)
             selected_situation = three_step_win_coordinates[index]
+        else:
+            size = len(go_for_tie)
+            index = random.randint(size)
+            selected_situation = go_for_tie[index]
+    # If we are one move away from win and Difficulty is 2
+    # Win the game
+    # If opponent is one move away from win
+    # Go for defending
+    opponent = switch_player(player, False)
+    opponent_one_step_win_coordinates = possible_win(board, opponent)[0]
+    print("Opponent: ", opponent, "Opp one step win: ", opponent_one_step_win_coordinates)
+    if len(one_step_win_coordinates) != 0 and difficulty == 2:
+        return pick_possible_coordinate(board, selected_situation)
+    elif len(opponent_one_step_win_coordinates) != 0 and difficulty == 2:
+        size = len(opponent_one_step_win_coordinates)
+        index = random.randint(size)-1 if size > 1 else 0
+        selected_situation = opponent_one_step_win_coordinates[index]
+        return pick_possible_coordinate(board, selected_situation)
     return pick_possible_coordinate(board, selected_situation)
-
-
-# print(get_ai_move([[".", "X", "."], [".", ".", "."], [".", ".", "."]], "X", 2))
 
 
 def mark(board, player, row, col):
@@ -175,17 +204,13 @@ def print_result(winner):
     return f"{winner} has won!" if winner != 0 else "It's a tie!"
 
 
-def switch_player(player):
-    return "X" if player == "O" else "O"
-
-
-def tictactoe_game(mode='HUMAN-HUMAN'):
+def tictactoe_game(mode='HUMAN-HUMAN', level=1):
     if mode == "HUMAN-HUMAN":
         board = init_board()
         print_board(board)
-        player = "X"
+        player = switch_player("X", True)
         while True:
-            player = switch_player(player)
+            player = switch_player(player, False)
             row, col = get_move(board, player)
             board = mark(board, player, row, col)
             print_board(board)
@@ -196,11 +221,24 @@ def tictactoe_game(mode='HUMAN-HUMAN'):
                 print(print_result(0))
                 break
     elif mode == "HUMAN-AI":
-        print("Fosat.txt")
+        board = init_board()
+        print_board(board)
+        player = switch_player("X", True)
+        while True:
+            row, col = get_move(board, player) if player == "X" else get_ai_move(board, player, level)
+            board = mark(board, player, row, col)
+            print_board(board)
+            if has_won(board, player):
+                print(print_result(player))
+                break
+            elif is_full(board):
+                print(print_result(0))
+                break
+            player = switch_player(player, False)
+
 
 def main_menu():
-    
-    tictactoe_game()
+    tictactoe_game("HUMAN-AI", 2)
 
 
 if __name__ == '__main__':
