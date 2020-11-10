@@ -28,7 +28,7 @@ def get_move(board, player):
             row = list(move_pos)[0]
             col = list(move_pos)[1]
             if row in alphabet_valid and col in numbers_valid and board[alphabet_to_index[row]][numbers_to_index[col]] == ".":
-                return (row, col)
+                return (alphabet_to_index[row], numbers_to_index[col])
         else:
             print("Please enter a valid position! A-C, 1-3")
 
@@ -124,15 +124,11 @@ def get_ai_move(board, player, difficulty):
     return pick_possible_coordinate(board, selected_situation)
 
 
-print(get_ai_move([[".", "X", "."], [".", ".", "."], [".", ".", "."]], "X", 2))
+# print(get_ai_move([[".", "X", "."], [".", ".", "."], [".", ".", "."]], "X", 2))
 
 
 def mark(board, player, row, col):
-    alphabet_to_index = {'A': 0, 'B': 1, 'C': 2}
-    numbers_to_index = {'1': 0, '2': 1, '3': 2}
-    row_index = alphabet_to_index[row]
-    col_index = numbers_to_index[col]
-    board[row_index][col_index] = player
+    board[row][col] = player
     return board
 
 
@@ -207,5 +203,5 @@ def main_menu():
     tictactoe_game()
 
 
-# if __name__ == '__main__':
-#     main_menu()
+if __name__ == '__main__':
+    main_menu()
