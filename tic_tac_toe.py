@@ -12,14 +12,15 @@ def get_move(board, player):
     alphabet_valid = ["C", "B", "A"]
     numbers_valid = ["1", "2", "3"]
     while True:
-        move_pos = input("Please enter your move")
+        print(f"It's {player}'s turn")
+        move_pos = input("Please enter your move: ")
         move_pos = move_pos.upper()
-        row = list(move_pos)[0]
-        col = list(move_pos)[1]
-        if move_pos != "" and len(move_pos) == 2:
-            if move_pos == "QUIT":
+        if move_pos == "QUIT":
                 sys.exit(0)
-            elif board[alphabet_to_index[row]][numbers_to_index[col]] == "." and row in alphabet_valid and col in numbers_valid:
+        if move_pos != "" and len(move_pos) == 2:
+            row = list(move_pos)[0]
+            col = list(move_pos)[1]
+            if row in alphabet_valid and col in numbers_valid and board[alphabet_to_index[row]][numbers_to_index[col]] == ".":
                 return (row, col)
 
 
@@ -77,27 +78,38 @@ def print_board(board):
 
 
 def print_result(winner):
-    """Congratulates winner or proclaims tie (if winner equals zero)."""
-    pass
+    return f"{winner} has won!" if winner != 0 else "It's a tie!"
+
+
+def switch_player(player):
+    return "X" if player == "O" else "O"
 
 
 def tictactoe_game(mode='HUMAN-HUMAN'):
-    board = init_board()
+    if mode == "HUMAN-HUMAN":
+        board = init_board()
+        player = "X"
+        while True:
+            player = switch_player(player)
+            print_board(board)
+            row, col = get_move(board, player)
+            board = mark(board, player, row, col)
+            print_board(board)
+            if has_won(board, player):
+                print(print_result(player))
+                break
+            elif is_full(board):
+                print(print_result(0))
+                break
 
-    # use get_move(), mark(), has_won(), is_full(), and print_board()
-    # to create game logic
-    print_board(board)
-    row, col = get_move(board, "x")
-    board = mark(board, "x", row, col)
-    print_board(board)
 
-#winner = 0
-#print_result(winner)
+# winner = 0
+# print_result(winner)
 
 
 def main_menu():
     tictactoe_game('HUMAN-HUMAN')
-"""
+
+
 if __name__ == '__main__':
     main_menu()
-"""
