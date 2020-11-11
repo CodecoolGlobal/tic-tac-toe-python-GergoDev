@@ -114,7 +114,7 @@ def get_ai_move(board, player, difficulty):
             size = len(two_step_win_coordinates)
             index = random.randint(size)
             selected_situation = two_step_win_coordinates[index]
-        elif len(three_step_win_coordinates) != 0:
+        elif len(one_step_win_coordinates) != 0:
             size = len(one_step_win_coordinates)
             index = random.randint(size)
             selected_situation = one_step_win_coordinates[index]
