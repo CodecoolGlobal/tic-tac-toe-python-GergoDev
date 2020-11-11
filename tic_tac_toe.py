@@ -3,6 +3,10 @@ import os
 import time
 from numpy import random
 from Graffic import graphics
+from pygame import mixer
+
+
+mixer.init()
 
 
 class bcolors:
@@ -15,6 +19,17 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+
+
+def play_music(file_path):
+    mixer.music.load(file_path)
+    mixer.music.set_volume(0.2)
+    mixer.music.play(-1)
+
+
+def play_sound_effect(file_path):
+    play_effect = mixer.Sound(file_path)
+    play_effect.play()
 
 
 def init_board():
@@ -41,9 +56,11 @@ def get_move(board, player):
         move_pos = input("Please enter your move: ")
         move_pos = move_pos.upper()
         if move_pos == "QUIT":
+            mixer.music.stop()
             os.system("clear")
             print(graphics[3])
-            time.sleep(1.8)
+            play_sound_effect("sounds/quit.ogg")
+            time.sleep(2)
             os.system("clear")
             sys.exit(0)
         if move_pos != "" and len(move_pos) == 2:
@@ -243,13 +260,20 @@ def tictactoe_game(mode='HUMAN-HUMAN', level=1):
         while True:
             player = switch_player(player, False)
             row, col = get_move(board, player)
+            play_sound_effect("sounds/move.ogg")
             board = mark(board, player, row, col)
             print_board(board)
             if has_won(board, player):
                 print(print_result(player))
+                mixer.music.stop()
+                play_sound_effect("sounds/win.ogg")
+                time.sleep(6.5)
                 break
             elif is_full(board):
                 print(print_result(0))
+                mixer.music.stop()
+                play_sound_effect("sounds/tie.ogg")
+                time.sleep(8.5)
                 break
     elif mode == "HUMAN-AI":
         board = init_board()
@@ -257,13 +281,20 @@ def tictactoe_game(mode='HUMAN-HUMAN', level=1):
         player = switch_player("X", True)
         while True:
             row, col = get_move(board, player) if player == "X" else get_ai_move(board, player, level)
+            play_sound_effect("sounds/move.ogg")
             board = mark(board, player, row, col)
             print_board(board)
             if has_won(board, player):
                 print(print_result(player))
+                mixer.music.stop()
+                play_sound_effect("sounds/win.ogg")
+                time.sleep(6.5)
                 break
             elif is_full(board):
                 print(print_result(0))
+                mixer.music.stop()
+                play_sound_effect("sounds/tie.ogg")
+                time.sleep(8.5)
                 break
             player = switch_player(player, False)
     elif mode == "AI-HUMAN":
@@ -272,13 +303,20 @@ def tictactoe_game(mode='HUMAN-HUMAN', level=1):
         player = switch_player("O", True)
         while True:
             row, col = get_move(board, player) if player == "X" else get_ai_move(board, player, level)
+            play_sound_effect("sounds/move.ogg")
             board = mark(board, player, row, col)
             print_board(board)
             if has_won(board, player):
                 print(print_result(player))
+                mixer.music.stop()
+                play_sound_effect("sounds/win.ogg")
+                time.sleep(6.5)
                 break
             elif is_full(board):
                 print(print_result(0))
+                mixer.music.stop()
+                play_sound_effect("sounds/tie.ogg")
+                time.sleep(8.5)
                 break
             player = switch_player(player, False)
 
@@ -288,13 +326,20 @@ def tictactoe_game(mode='HUMAN-HUMAN', level=1):
         player = switch_player("O", True)
         while True:
             row, col = get_ai_move(board, player, level) if player == "X" else get_ai_move(board, player, level)
+            play_sound_effect("sounds/move.ogg")
             board = mark(board, player, row, col)
             print_board(board)
             if has_won(board, player):
                 print(print_result(player))
+                mixer.music.stop()
+                play_sound_effect("sounds/win.ogg")
+                time.sleep(6.5)
                 break
             elif is_full(board):
                 print(print_result(0))
+                mixer.music.stop()
+                play_sound_effect("sounds/tie.ogg")
+                time.sleep(8.5)
                 break
             player = switch_player(player, False)
             time.sleep(1)
@@ -322,10 +367,12 @@ def ai_level():
 
 
 def main_menu():
+    play_music("sounds/theme_song.ogg")
     print(graphics[0])
     print(graphics[5])
 
     game_mode = menu_game_mode_validator()
+    play_sound_effect("sounds/select.ogg")
     if game_mode == 1:
         tictactoe_game("HUMAN-HUMAN")
     elif game_mode == 2:
@@ -333,18 +380,21 @@ def main_menu():
         print(graphics[0])
         print(graphics[6])
         level = ai_level()
+        play_sound_effect("sounds/select.ogg")
         tictactoe_game("HUMAN-AI", level)
     elif game_mode == 3:
         os.system("clear")
         print(graphics[0])
         print(graphics[6])
         level = ai_level()
+        play_sound_effect("sounds/select.ogg")
         tictactoe_game("AI-HUMAN", level)
     elif game_mode == 4:
         os.system("clear")
         print(graphics[0])
         print(graphics[6])
         level = ai_level()
+        play_sound_effect("sounds/select.ogg")
         tictactoe_game("AI-AI", level)
 
 
