@@ -4,6 +4,19 @@ import time
 from numpy import random
 from Graffic import graphics
 
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
 def init_board():
     board = [[".", ".", "."], [".", ".", "."], [".", ".", "."]]
     return board
@@ -198,12 +211,12 @@ def print_board(board):
 
 
 
-                               1   2   3
-                            A  {board[0][0]} | {board[0][1]} | {board[0][2]}
-                              ---+---+---
-                            B  {board[1][0]} | {board[1][1]} | {board[1][2]}
-                              ---+---+---
-                            C  {board[2][0]} | {board[2][1]} | {board[2][2]}
+                               {bcolors.BOLD}1   2   3{bcolors.ENDC}
+                            {bcolors.BOLD}A{bcolors.ENDC}  {board[0][0]} {bcolors.WARNING}|{bcolors.ENDC} {board[0][1]} {bcolors.WARNING}|{bcolors.ENDC} {board[0][2]}
+                              {bcolors.WARNING}---+---+---{bcolors.ENDC}
+                            {bcolors.BOLD}B{bcolors.ENDC}  {board[1][0]} {bcolors.WARNING}|{bcolors.ENDC} {board[1][1]} {bcolors.WARNING}|{bcolors.ENDC} {board[1][2]}
+                              {bcolors.WARNING}---+---+---{bcolors.ENDC}
+                            {bcolors.BOLD}C{bcolors.ENDC}  {board[2][0]} {bcolors.WARNING}|{bcolors.ENDC} {board[2][1]} {bcolors.WARNING}|{bcolors.ENDC} {board[2][2]}
     
     
 
@@ -285,9 +298,6 @@ def tictactoe_game(mode='HUMAN-HUMAN', level=1):
                 break
             player = switch_player(player, False)
             time.sleep(1)
-            
-    
-
 
 
 def menu_game_mode_validator():
