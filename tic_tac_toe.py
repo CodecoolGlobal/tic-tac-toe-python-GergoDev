@@ -2,7 +2,7 @@ import sys
 import os
 import time
 from numpy import random
-
+from Graffic import graphics
 
 def init_board():
     board = [[".", ".", "."], [".", ".", "."], [".", ".", "."]]
@@ -29,8 +29,8 @@ def get_move(board, player):
         move_pos = move_pos.upper()
         if move_pos == "QUIT":
             os.system("clear")
-            print("Good bye!")
-            time.sleep(1.3)
+            print(graphics[3])
+            time.sleep(1.8)
             os.system("clear")
             sys.exit(0)
         if move_pos != "" and len(move_pos) == 2:
@@ -192,16 +192,36 @@ def is_full(board):
 def print_board(board):
     os.system("clear")
     print(f"""
-       1   2   3
-    A  {board[0][0]} | {board[0][1]} | {board[0][2]}
-      ---+---+---
-    B  {board[1][0]} | {board[1][1]} | {board[1][2]}
-      ---+---+---
-    C  {board[2][0]} | {board[2][1]} | {board[2][2]}""")
+
+
+
+
+
+
+                               1   2   3
+                            A  {board[0][0]} | {board[0][1]} | {board[0][2]}
+                              ---+---+---
+                            B  {board[1][0]} | {board[1][1]} | {board[1][2]}
+                              ---+---+---
+                            C  {board[2][0]} | {board[2][1]} | {board[2][2]}
+    
+    
+
+
+
+    
+    """)
 
 
 def print_result(winner):
-    return f"{winner} has won!" if winner != 0 else "It's a tie!"
+    time.sleep(1.6)
+    # os.system("clear")
+    if winner == "X":
+        return graphics[1]
+    elif winner == "O":
+        return graphics[2]
+    else:
+        return graphics[4]
 
 
 def tictactoe_game(mode='HUMAN-HUMAN', level=1):
@@ -243,3 +263,4 @@ def main_menu():
 
 if __name__ == '__main__':
     main_menu()
+
