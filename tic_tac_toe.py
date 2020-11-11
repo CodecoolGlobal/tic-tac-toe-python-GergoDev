@@ -214,8 +214,6 @@ def print_board(board):
 
 
 def print_result(winner):
-    time.sleep(1.6)
-    # os.system("clear")
     if winner == "X":
         return graphics[1]
     elif winner == "O":
@@ -255,12 +253,90 @@ def tictactoe_game(mode='HUMAN-HUMAN', level=1):
                 print(print_result(0))
                 break
             player = switch_player(player, False)
+    elif mode == "AI-HUMAN":
+        board = init_board()
+        print_board(board)
+        player = switch_player("O", True)
+        while True:
+            row, col = get_move(board, player) if player == "X" else get_ai_move(board, player, level)
+            board = mark(board, player, row, col)
+            print_board(board)
+            if has_won(board, player):
+                print(print_result(player))
+                break
+            elif is_full(board):
+                print(print_result(0))
+                break
+            player = switch_player(player, False)
+
+    elif mode == "AI-AI":
+        board = init_board()
+        print_board(board)
+        player = switch_player("O", True)
+        while True:
+            row, col = get_ai_move(board, player, level) if player == "X" else get_ai_move(board, player, level)
+            board = mark(board, player, row, col)
+            print_board(board)
+            if has_won(board, player):
+                print(print_result(player))
+                break
+            elif is_full(board):
+                print(print_result(0))
+                break
+            player = switch_player(player, False)
+            time.sleep(1)
+            
+    
+
+
+
+def menu_game_mode_validator():
+    list_of_valid_inputs = ["1", "2", "3", "4"]
+
+    while True:
+        users_decision = input()
+        if users_decision in list_of_valid_inputs:
+            return int(users_decision)
+        else:
+            print("You can only pick option 1-4")
+
+
+def ai_level():
+    list_of_valid_inputs = ["1", "2"]
+    while True:
+        users_decision = input()
+        if users_decision in list_of_valid_inputs:
+            return int(users_decision)
+        else:
+            print("You can only pick option 1-2")
 
 
 def main_menu():
-    tictactoe_game("HUMAN-AI", 2)
+    print(graphics[0])
+    print(graphics[5])
+
+    game_mode = menu_game_mode_validator()
+    if game_mode == 1:
+        tictactoe_game("HUMAN-HUMAN")
+    elif game_mode == 2:
+        os.system("clear")
+        print(graphics[0])
+        print(graphics[6])
+        level = ai_level()
+        tictactoe_game("HUMAN-AI", level)
+    elif game_mode == 3:
+        os.system("clear")
+        print(graphics[0])
+        print(graphics[6])
+        level = ai_level()
+        tictactoe_game("AI-HUMAN", level)
+    elif game_mode == 4:
+        os.system("clear")
+        print(graphics[0])
+        print(graphics[6])
+        level = ai_level()
+        tictactoe_game("AI-AI", level)
 
 
 if __name__ == '__main__':
     main_menu()
-
