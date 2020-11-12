@@ -105,6 +105,8 @@ def possible_win(board, player):
             three_step_win_coordinates.append(situation)
         elif player_result_count == 1 and opponent_result_count == 1:
             go_for_tie.append(situation)
+        elif opponent_result_count == 2 and player_result_count == 0:
+            go_for_tie.append(situation)
     return [
         one_step_win_coordinates,
         two_step_win_coordinates,
@@ -124,59 +126,49 @@ def pick_possible_coordinate(board, situation):
     return possible_coordinates[index]
 
 
+def pick_a_situation(win_coordinates):
+    size = len(win_coordinates)
+    index = random.randint(size)
+    return win_coordinates[index]
+
+
 def get_ai_move(board, player, difficulty):
     time.sleep(1)
     win_coordinates = possible_win(board, player)
     one_step_win_coordinates, two_step_win_coordinates, three_step_win_coordinates, go_for_tie = win_coordinates
     selected_situation = None
-    print("One step win: ", one_step_win_coordinates)
-    print("\n")
-    print("Two step win: ", two_step_win_coordinates)
-    print("\n")
-    print("Three step win: ", three_step_win_coordinates)
-    print("\n")
-    print("Go for tie: ", go_for_tie)
+    # print("One step win: ", one_step_win_coordinates)
+    # print("\n")
+    # print("Two step win: ", two_step_win_coordinates)
+    # print("\n")
+    # print("Three step win: ", three_step_win_coordinates)
+    # print("\n")
+    # print("Go for tie: ", go_for_tie)
     if difficulty == 1:
         if len(three_step_win_coordinates) != 0:
-            size = len(three_step_win_coordinates)
-            index = random.randint(size)
-            selected_situation = three_step_win_coordinates[index]
+            selected_situation = pick_a_situation(three_step_win_coordinates)
         elif len(two_step_win_coordinates) != 0:
-            size = len(two_step_win_coordinates)
-            index = random.randint(size)
-            selected_situation = two_step_win_coordinates[index]
+            selected_situation = pick_a_situation(two_step_win_coordinates)
         elif len(one_step_win_coordinates) != 0:
-            size = len(one_step_win_coordinates)
-            index = random.randint(size)
-            selected_situation = one_step_win_coordinates[index]
+            selected_situation = pick_a_situation(one_step_win_coordinates)
         else:
-            size = len(go_for_tie)
-            index = random.randint(size)
-            selected_situation = go_for_tie[index]
+            selected_situation = pick_a_situation(go_for_tie)
     elif difficulty == 2:
         if len(one_step_win_coordinates) != 0:
-            size = len(one_step_win_coordinates)
-            index = random.randint(size)
-            selected_situation = one_step_win_coordinates[index]
+            selected_situation = pick_a_situation(one_step_win_coordinates)
         elif len(two_step_win_coordinates) != 0:
-            size = len(two_step_win_coordinates)
-            index = random.randint(size)
-            selected_situation = two_step_win_coordinates[index]
+            selected_situation = pick_a_situation(two_step_win_coordinates)
         elif len(three_step_win_coordinates) != 0:
-            size = len(three_step_win_coordinates)
-            index = random.randint(size)
-            selected_situation = three_step_win_coordinates[index]
+            selected_situation = pick_a_situation(three_step_win_coordinates)
         else:
-            size = len(go_for_tie)
-            index = random.randint(size)
-            selected_situation = go_for_tie[index]
+            selected_situation = pick_a_situation(go_for_tie)
     # If we are one move away from win and Difficulty is 2
     # Win the game
     # If opponent is one move away from win
     # Go for defending
     opponent = switch_player(player, False)
     opponent_one_step_win_coordinates = possible_win(board, opponent)[0]
-    print("Opponent: ", opponent, "Opp one step win: ", opponent_one_step_win_coordinates)
+    # print("Opponent: ", opponent, "Opp one step win: ", opponent_one_step_win_coordinates)
     if len(one_step_win_coordinates) != 0 and difficulty == 2:
         return pick_possible_coordinate(board, selected_situation)
     elif len(opponent_one_step_win_coordinates) != 0 and difficulty == 2:
