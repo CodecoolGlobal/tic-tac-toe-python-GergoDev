@@ -378,11 +378,9 @@ def playing_asker():
             return False
 
 
-
-
 def main_menu():
     agree_to_play = True
-    
+
     while agree_to_play:
         play_music("sounds/theme_song.ogg")
         os.system("clear")
