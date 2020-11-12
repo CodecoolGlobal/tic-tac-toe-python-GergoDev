@@ -368,10 +368,11 @@ def ai_level():
 
 
 def main_menu():
+    
     play_music("sounds/theme_song.ogg")
     print(graphics[0])
     print(graphics[5])
-
+    
     game_mode = menu_game_mode_validator()
     play_sound_effect("sounds/select.ogg")
     if game_mode == 1:
