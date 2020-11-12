@@ -125,7 +125,7 @@ def pick_possible_coordinate(board, situation):
 
 
 def get_ai_move(board, player, difficulty):
-    time.sleep(3)
+    time.sleep(1)
     win_coordinates = possible_win(board, player)
     one_step_win_coordinates, two_step_win_coordinates, three_step_win_coordinates, go_for_tie = win_coordinates
     selected_situation = None
@@ -367,37 +367,61 @@ def ai_level():
             print("You can only pick option 1-2")
 
 
+def playing_asker():
+    List_of_valid_asker = ["Y", "N", "Quit"]
+    asker_to_play = input("Do you want to play again?[Y/N]")
+    asker_to_play = asker_to_play.upper()
+    if asker_to_play in List_of_valid_asker:
+        if asker_to_play == "Y":
+            print("Oky Doky")
+            time.sleep(1.6)
+            return True
+        elif asker_to_play == "N":
+            os.system("clear")
+            print(graphics[3])
+            play_sound_effect("sounds/quit.ogg")
+            time.sleep(2)
+            os.system("clear")
+            time.sleep(1.6)
+            return False
+
+
+
+
 def main_menu():
+    agree_to_play = True
     
-    play_music("sounds/theme_song.ogg")
-    print(graphics[0])
-    print(graphics[5])
-    
-    game_mode = menu_game_mode_validator()
-    play_sound_effect("sounds/select.ogg")
-    if game_mode == 1:
-        tictactoe_game("HUMAN-HUMAN")
-    elif game_mode == 2:
+    while agree_to_play:
+        play_music("sounds/theme_song.ogg")
         os.system("clear")
         print(graphics[0])
-        print(graphics[6])
-        level = ai_level()
+        print(graphics[5])
+        game_mode = menu_game_mode_validator()
         play_sound_effect("sounds/select.ogg")
-        tictactoe_game("HUMAN-AI", level)
-    elif game_mode == 3:
-        os.system("clear")
-        print(graphics[0])
-        print(graphics[6])
-        level = ai_level()
-        play_sound_effect("sounds/select.ogg")
-        tictactoe_game("AI-HUMAN", level)
-    elif game_mode == 4:
-        os.system("clear")
-        print(graphics[0])
-        print(graphics[6])
-        level = ai_level()
-        play_sound_effect("sounds/select.ogg")
-        tictactoe_game("AI-AI", level)
+        if game_mode == 1:
+            tictactoe_game("HUMAN-HUMAN")
+        elif game_mode == 2:
+            os.system("clear")
+            print(graphics[0])
+            print(graphics[6])
+            level = ai_level()
+            play_sound_effect("sounds/select.ogg")
+            tictactoe_game("HUMAN-AI", level)
+        elif game_mode == 3:
+            os.system("clear")
+            print(graphics[0])
+            print(graphics[6])
+            level = ai_level()
+            play_sound_effect("sounds/select.ogg")
+            tictactoe_game("AI-HUMAN", level)
+        elif game_mode == 4:
+            os.system("clear")
+            print(graphics[0])
+            print(graphics[6])
+            level = ai_level()
+            play_sound_effect("sounds/select.ogg")
+            tictactoe_game("AI-AI", level)
+        agree_to_play = playing_asker()
 
 
 if __name__ == '__main__':
