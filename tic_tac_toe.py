@@ -125,6 +125,7 @@ def pick_possible_coordinate(board, situation):
 
 
 def get_ai_move(board, player, difficulty):
+    time.sleep(3)
     win_coordinates = possible_win(board, player)
     one_step_win_coordinates, two_step_win_coordinates, three_step_win_coordinates, go_for_tie = win_coordinates
     selected_situation = None
