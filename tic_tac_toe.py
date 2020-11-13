@@ -23,7 +23,7 @@ class bcolors:
 
 def play_music(file_path):
     mixer.music.load(file_path)
-    mixer.music.set_volume(0.2)
+    mixer.music.set_volume(0.08)
     mixer.music.play(-1)
 
 
